@@ -7,7 +7,9 @@ public class VL53L1X_JNI_I2C implements Runnable {
        System.loadLibrary("vl53l1x_i2c");
     }
 
-    private native boolean i2CBegin();
+    private native boolean[] sensorInit();
+
+    private native int[] getSensorId();
 
     private native void i2CSetIntermeasurementPeriod(int period);
 
@@ -16,13 +18,16 @@ public class VL53L1X_JNI_I2C implements Runnable {
     @Override
     public void run() {
         System.out.println("Inside of run:");
-        // vl53l1x_jni_i2c = new VL53L1X_JNI_I2C();
-        boolean result = Robot.vl53l1x_jni_i2c.i2CBegin();
-        if (result) {
-            System.out.println("Result was true");
-        } else {
-            System.out.println("Result was false");
+        boolean[] sensorInitResults = Robot.vl53l1x_jni_i2c.sensorInit();
+
+        for (boolean sensorInitResult: sensorInitResults) {
+            String extra_success = sensorInitResult ? " NOT" : "";
+            System.out.println(String.format("INFO: JAVA: Sensor Init was%s successful", extra_success));
+        }
+
+        int[] sensorIDs = Robot.vl53l1x_jni_i2c.getSensorId();
+        for (int sensorID : sensorIDs) {
+            System.out.println(String.format("INFO: JAVA: Sensor ID is: %#X", sensorID));
         }
     }
-
 }

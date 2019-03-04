@@ -113,16 +113,6 @@ typedef struct {
 	uint32_t     revision; /*!< revision number */
 } VL53L1X_Version_t;
 
-
-typedef struct {
-
-	uint8_t   I2cDevAddr;
-	std::shared_ptr<frc::I2C> I2cHandle;
-
-} VL53L1_Dev_t;
-
-typedef std::shared_ptr<VL53L1_Dev_t> VL53L1_DEV;
-
 void delay(int milliseconds);
 
 
@@ -135,19 +125,19 @@ class VL53L1X : public RangeSensor
     /** Constructor
      * @param[in] &i2c device I2C to be used for communication
      * @param[in] &pin_gpio1 pin Mbed InterruptIn PinName to be used as component GPIO_1 INT
-     * @param[in] DevAddr device address, 0x52 by default
+     * @param[in] DevAddr device address, 0x29 by default
      */
-    VL53L1X(std::shared_ptr<frc::I2C> i2c, int pin, int pin_gpio1) : RangeSensor(), dev_i2c(i2c)
+    VL53L1X(std::shared_ptr<frc::I2C> i2c, int pin = -1, int pin_gpio1 = -1) : RangeSensor(), dev_i2c(i2c)
     {
-       Device->I2cDevAddr = VL53L1X_DEFAULT_DEVICE_ADDRESS;
-	   Device->I2cHandle = i2c;
 	   if (pin > 0)
 	   {
 		   gpio0 = std::make_shared<frc::DigitalOutput>(pin);
+		   gpio0->Set(false);
 	   }
 	   if (pin_gpio1 > 0)
 	   {
 		   gpio1Int = std::make_shared<frc::DigitalOutput>(pin_gpio1);
+		   gpio1Int->Set(false);
 	   }
     }
     
@@ -166,12 +156,8 @@ class VL53L1X : public RangeSensor
     /* turns on the sensor */
     virtual void VL53L1_On(void)
     {
-    //    if(gpio0 >= 0)
-    //    {
-    //      digitalWrite(gpio0, HIGH);
-    //    }
-	   gpio0->Set(true);
-       delay(10);
+		gpio0->Set(true);
+		delay(10);
     }
 
 	/**
@@ -181,12 +167,8 @@ class VL53L1X : public RangeSensor
     /* turns off the sensor */
     virtual void VL53L1_Off(void)
     {
-    //    if(gpio0 >= 0)
-    //    {
-    //      digitalWrite(gpio0, LOW);
-    //    }
-	   gpio0->Set(false);
-       delay(10);
+		gpio0->Set(false);
+		delay(10);
     }
 
 	/**
@@ -211,8 +193,7 @@ class VL53L1X : public RangeSensor
 		status = VL53L1_RdWord(Device, 0x010F, &wordData);
 		Serial.println("VL53L1X: " + String(wordData));
 #endif
-		
-		
+				
 		while (!sensorState && !status){
 			status = VL53L1X_BootState(&sensorState);
 			delay(2);
@@ -248,7 +229,6 @@ class VL53L1X : public RangeSensor
 	}
 
 
-
 /**
  * @brief Get ranging result and only that
  * @param pRange_mm  Pointer to range distance
@@ -265,8 +245,6 @@ class VL53L1X : public RangeSensor
 
 
 /* VL53L1X_api.h functions */
-
-
 
 	/**
 	 * @brief This function returns the SW driver version
@@ -524,36 +502,29 @@ class VL53L1X : public RangeSensor
 	int8_t VL53L1X_CalibrateXtalk(uint16_t TargetDistInMm, uint16_t *xtalk);
 
 
-
-
-
-
  protected:
-    
 
     /* Write and read functions from I2C */
 
-    VL53L1X_ERROR VL53L1_WrByte(VL53L1_DEV dev, uint16_t index, uint8_t data);
-    VL53L1X_ERROR VL53L1_WrWord(VL53L1_DEV dev, uint16_t index, uint16_t data);
-    VL53L1X_ERROR VL53L1_WrDWord(VL53L1_DEV dev, uint16_t index, uint32_t data);
-    VL53L1X_ERROR VL53L1_RdByte(VL53L1_DEV dev, uint16_t index, uint8_t *data);
-    VL53L1X_ERROR VL53L1_RdWord(VL53L1_DEV dev, uint16_t index, uint16_t *data);
-    VL53L1X_ERROR VL53L1_RdDWord(VL53L1_DEV dev, uint16_t index, uint32_t *data);
+    VL53L1X_ERROR VL53L1_WrByte(uint16_t index, uint8_t data);
+    VL53L1X_ERROR VL53L1_WrWord(uint16_t index, uint16_t data);
+    VL53L1X_ERROR VL53L1_WrDWord(uint16_t index, uint32_t data);
+    VL53L1X_ERROR VL53L1_RdByte(uint16_t index, uint8_t *data);
+    VL53L1X_ERROR VL53L1_RdWord(uint16_t index, uint16_t *data);
+    VL53L1X_ERROR VL53L1_RdDWord(uint16_t index, uint32_t *data);
     // VL53L1X_ERROR VL53L1_UpdateByte(VL53L1_DEV dev, uint16_t index, uint8_t AndData, uint8_t OrData);
 
-    VL53L1X_ERROR VL53L1_WriteMulti(VL53L1_DEV Dev, uint16_t index, uint8_t *pdata, uint32_t count);
-    VL53L1X_ERROR VL53L1_ReadMulti(VL53L1_DEV Dev, uint16_t index, uint8_t *pdata, uint32_t count);
+    VL53L1X_ERROR VL53L1_WriteMulti(uint16_t index, uint8_t *pdata, uint32_t count);
+    VL53L1X_ERROR VL53L1_ReadMulti(uint16_t index, uint8_t *pdata, uint32_t count);
 
-	VL53L1X_ERROR VL53L1_I2CWrite(uint8_t dev, uint16_t index, uint8_t *data, uint16_t number_of_bytes);
+	// VL53L1X_ERROR VL53L1_I2CWrite(uint8_t dev, uint16_t index, uint8_t *data, uint16_t number_of_bytes);
 	// VL53L1X_ERROR VL53L1_I2CRead(uint8_t dev, uint16_t index, uint8_t *data, uint16_t number_of_bytes);
 	VL53L1X_ERROR VL53L1_GetTickCount(uint32_t *ptick_count_ms);
-	VL53L1X_ERROR VL53L1_WaitUs(VL53L1_DEV pdev, int32_t wait_us);
-	VL53L1X_ERROR VL53L1_WaitMs(VL53L1_DEV pdev, int32_t wait_ms);
+	VL53L1X_ERROR VL53L1_WaitUs(int32_t wait_us);
+	VL53L1X_ERROR VL53L1_WaitMs(int32_t wait_ms);
 	
-	VL53L1X_ERROR VL53L1_WaitValueMaskEx(VL53L1_DEV pdev, uint32_t timeout_ms, uint16_t index, uint8_t value, uint8_t mask, uint32_t poll_delay_ms);
+	VL53L1X_ERROR VL53L1_WaitValueMaskEx(uint32_t timeout_ms, uint16_t index, uint8_t value, uint8_t mask, uint32_t poll_delay_ms);
 	
-	
-
  protected:
 
     /* IO Device */
@@ -561,9 +532,8 @@ class VL53L1X : public RangeSensor
     /* Digital out pin */
 	std::shared_ptr<frc::DigitalOutput> gpio0;
 	std::shared_ptr<frc::DigitalOutput> gpio1Int;
-    /* Device data */
-	// VL53L1_Dev_t MyDevice;
-	VL53L1_DEV Device;
+
+	uint8_t i2cDevAddr = VL53L1X_DEFAULT_DEVICE_ADDRESS;
 };
 
 
