@@ -113,7 +113,32 @@ JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_stopRanging(JNIE
     }
 }
 
-JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_vl53l2xI2CSetIntermeasurementPeriod(JNIEnv *, jobject, jint)
+JNIEXPORT jbyteArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getRangeStatus(JNIEnv *env, jobject thisObj)
 {
+    uint8_t rangeStatus;
+    jbyte rangeStatuses[NUM_SENSORS];
+    int i =0;
+    for (VL53L1X& vl53l1x : vl53l1x_list) {
+        vl53l1x.VL53L1X_GetRangeStatus(&rangeStatus);
+        rangeStatuses[i++] = rangeStatus;
+    }
 
+    jbyteArray results = env->NewByteArray(NUM_SENSORS);
+    env->SetByteArrayRegion(results, 0, NUM_SENSORS, rangeStatuses);
+
+    return results;
 }
+
+JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_setIntermeasurementPeriod(JNIEnv *env, jobject thisObj, jint intermeasurement)
+{
+    for (VL53L1X& vl53l1x : vl53l1x_list) {
+        vl53l1x.VL53L1X_SetInterMeasurementInMs(intermeasurement);
+    }
+}
+
+JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_setTimingBudgetInMs(JNIEnv *env, jobject thisObj, jint TB)
+  {
+    for (VL53L1X& vl53l1x : vl53l1x_list) {
+        vl53l1x.VL53L1X_SetTimingBudgetInMs(TB);
+    }
+  }

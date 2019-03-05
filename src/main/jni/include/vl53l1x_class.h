@@ -284,7 +284,7 @@ class VL53L1X : public RangeSensor
 	VL53L1X_ERROR VL53L1X_GetSWVersion(VL53L1X_Version_t *pVersion);
 
 	/**
-	 * @brief This function sets the sensor I2C address used in case multiple devices application, default address 0x52
+	 * @brief This function sets the sensor I2C address used in case multiple devices application, default address 0x29
 	 */
 	VL53L1X_ERROR VL53L1X_SetI2CAddress(uint8_t new_address);
 

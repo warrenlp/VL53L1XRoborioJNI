@@ -19,7 +19,11 @@ public class VL53L1X_JNI_I2C implements Runnable {
 
     private native void stopRanging();
 
-    private native void i2CSetIntermeasurementPeriod(int period);
+    private native byte[] getRangeStatus();
+
+    private native void setIntermeasurementPeriod(int period);
+
+    private native void setTimingBudgetInMs(int period);
 
     private double m_expirationTime;
     private final int m_notifier = NotifierJNI.initializeNotifier();
@@ -35,10 +39,7 @@ public class VL53L1X_JNI_I2C implements Runnable {
             System.out.println(String.format("INFO: JAVA: Sensor Init was%s successful", extra_success));
         }
 
-        int[] sensorIDs = Robot.vl53l1x_jni_i2c.getSensorId();
-        for (int sensorID : sensorIDs) {
-            System.out.println(String.format("INFO: JAVA: Sensor ID is: %#X", sensorID));
-        }
+        Robot.vl53l1x_jni_i2c.setTimingBudgetInMs(40);
 
         m_expirationTime = RobotController.getFPGATime() * 1e-6 + m_period;
         updateAlarm();
@@ -63,6 +64,31 @@ public class VL53L1X_JNI_I2C implements Runnable {
 
         for (int distance : distances) {
             System.out.println(String.format("INFO: Distance: %03d", distance));
+        }
+
+        byte[] rangeStatuses = Robot.vl53l1x_jni_i2c.getRangeStatus();
+        for (byte rangeStatus : rangeStatuses) {
+            StringBuilder sb = new StringBuilder("INFO: Range Status: ");
+            switch (rangeStatus)
+            {
+                case 0:
+                    sb.append("Good");
+                break;
+                case 1:
+                    sb.append("Signal fail");
+                break;
+                case 2:
+                    sb.append("Sigma fail");
+                break;
+                case 7:
+                    sb.append("Wrapped target fail");
+                break;
+                default:
+                    sb.append("Unknown: ");
+                    sb.append(rangeStatus);
+                break;
+            }
+            System.out.println(sb.toString());
         }
     }
 
