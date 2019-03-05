@@ -47,6 +47,8 @@
 #include "RangeSensor.h"
 #include "vl53l1_error_codes.h"
 
+#include <iostream>
+
 #define VL53L1X_IMPLEMENTATION_VER_MAJOR       1
 #define VL53L1X_IMPLEMENTATION_VER_MINOR       0
 #define VL53L1X_IMPLEMENTATION_VER_SUB         1
@@ -175,6 +177,38 @@ class VL53L1X : public RangeSensor
 	 * @brief       Initialize the sensor with default values
 	 * @return      0 on Success
 	 */
+
+	VL53L1X_ERROR AddressChangeThenVerifySensor(uint8_t new_address) {
+		dev_i2c.reset(new frc::I2C(frc::I2C::Port::kOnboard, new_address));
+		return VerifySensor(new_address);
+	}
+
+	VL53L1X_ERROR VerifySensor(uint8_t address) {
+		bool verified = true;
+		uint8_t verifyIndex[] = {0x01, 0x0F};
+		uint8_t VERIFY_CONST[] = {0xEA, 0xCC, 0x10};
+
+		uint8_t verifyBuffer[3];
+
+		bool aborted = dev_i2c->Transaction(verifyIndex, 2, verifyBuffer, 3);
+
+		if (aborted) {
+        	return -1;
+		}
+
+		for (int i=0; i<3; ++i) {
+			if (verifyBuffer[i] != VERIFY_CONST[i]) {
+				verified = false;
+                break;
+            } 
+		}
+
+		if (verified) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
 	 
 	 VL53L1X_ERROR InitSensor(uint8_t address){
 		VL53L1X_ERROR status = 0;
@@ -216,8 +250,6 @@ class VL53L1X : public RangeSensor
     {
        return VL53L1X_SensorInit();
     }
-
-
 
     /* Read function of the ID device */
     virtual int ReadID(){

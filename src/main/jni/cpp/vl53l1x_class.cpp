@@ -188,19 +188,25 @@ VL53L1X_ERROR VL53L1X::VL53L1X_SensorInit()
 	VL53L1X_ERROR status = 0;
 	uint8_t Addr = 0x00, tmp=0;
 
-	for (Addr = 0x2D; Addr <= 0x87; Addr++){
-		// status = VL53L1_WrByte(Addr, VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D]);
-		status = dev_i2c->Write(Addr, VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D]);
+	for (Addr = 0x2D; Addr <= 0x87; Addr++) {
+		status = VL53L1_WrByte(Addr, VL51L1X_DEFAULT_CONFIGURATION[Addr - 0x2D]);
 		if (status) {
 			std::cerr << "Failed configuration: False" << std::endl;
 			return -1;
 		}
 	}
+
+	std::cout << "INFO: C++ Sensor Configuration successful" << std::endl;
+
 	status = VL53L1X_StartRanging();
-	while(tmp==0){
+
+	while(tmp==0) {
 			status = VL53L1X_CheckForDataReady(&tmp);
+			if (status) {
+				std::cerr << "Failed VL53L1X_CheckForDataReady:" << std::endl;
+			}
 	}
-	tmp  = 0;
+	tmp = 0;
 	status = VL53L1X_ClearInterrupt();
 	status = VL53L1X_StopRanging();
 	status = VL53L1_WrByte( VL53L1_VHV_CONFIG__TIMEOUT_MACROP_LOOP_BOUND, 0x09); /* two bounds VHV */
@@ -272,6 +278,7 @@ VL53L1X_ERROR VL53L1X::VL53L1X_CheckForDataReady(uint8_t *isDataReady)
 	status = VL53L1_RdByte( GPIO__TIO_HV_STATUS, &Temp);
 	/* Read in the register to check if a new value is available */
 	if (status == 0){
+		// printf("INFO: VL53L1X_GetInterruptPolarity: %d, HV_STATUS: %d\n", IntPol, Temp);
 		if ((Temp & 1) == IntPol)
 			*isDataReady = 1;
 		else
