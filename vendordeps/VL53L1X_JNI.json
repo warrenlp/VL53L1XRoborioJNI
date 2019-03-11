@@ -16,6 +16,11 @@
         "groupId": "com.github.warrenlp",
         "artifactId": "vl53l1x_i2c-java",
         "version": "2019-1"
+        "isJar": false,
+        "skipInvalidPlatforms": true,
+        "validPlatforms": [
+            "linuxathena"
+        ]
     }],
     "cppDependencies": []
 }
