@@ -1,0 +1,32 @@
+{
+    "fileName": "VL53LX1_JNI.json",
+    "name": "VL53LX1_JNI",
+    "version": "2019-1",
+    "uuid": "1056f4cf-34d8-4bf9-886e-4a50ed932281",
+    "mavenUrls": [
+        "http://maven.highcurrent.io/maven"
+    ],
+    "jsonUrl": "http://maven.highcurrent.io/vendordeps/ADIS16448.json",
+    "javaDependencies": [
+        {
+            "groupId": "com.github.warrenlp",
+            "artifactId": "adis16448-java",
+            "version": "2019-1"
+        }
+    ],
+    "jniDependencies": [],
+    "cppDependencies": [
+        {
+            "groupId": "com.github.warrenlp",
+            "artifactId": "adis16448-cpp",
+            "version": "2019-1",
+            "libName": "libadis16448imu",
+            "headerClassifier": "headers",
+            "sharedLibrary": false,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "linuxathena"
+            ]
+        }
+    ]
+}
