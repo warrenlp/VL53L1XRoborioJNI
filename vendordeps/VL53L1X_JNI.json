@@ -17,6 +17,7 @@
         "artifactId": "vl53l1x_i2c-jni",
         "version": "2019-1",
         "isJar": false,
+        "sharedLibrary": true,
         "skipInvalidPlatforms": true,
         "validPlatforms": [
             "linuxathena"
