@@ -14,7 +14,7 @@
     }],
     "jniDependencies": [{
         "groupId": "com.github.warrenlp",
-        "artifactId": "vl53l1x_i2c-java",
+        "artifactId": "vl53l1x_i2c-jni",
         "version": "2019-1",
         "isJar": false,
         "skipInvalidPlatforms": true,
