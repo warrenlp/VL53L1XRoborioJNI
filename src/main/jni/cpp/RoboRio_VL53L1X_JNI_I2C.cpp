@@ -1,5 +1,5 @@
 
-#include "frc_robot_vl53l1x_VL53L1X_JNI_I2C.h"
+#include "com_github_warrenlp_VL53L1X_JNI_I2C.h"
 
 #include "vl53l1x_class.h"
 #include "frc/I2C.h"
@@ -14,7 +14,7 @@
 // Split into array for multiple sensors
 VL53L1X vl53l1x_list[] = {VL53L1X(std::make_shared<frc::I2C>(frc::I2C::Port::kOnboard, VL53L1X_DEFAULT_DEVICE_ADDRESS), 1)};
 
-JNIEXPORT jbooleanArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_sensorInit(JNIEnv *env, jobject thisObj)
+JNIEXPORT jbooleanArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_sensorInit(JNIEnv *env, jobject thisObj)
 {   
     std::cout << "INFO: C++ sensorInit:" << std::endl;
 
@@ -66,7 +66,7 @@ JNIEXPORT jbooleanArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_sensorI
     return results;
 }
 
-JNIEXPORT jintArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getSensorId(JNIEnv *env, jobject thisObj)
+JNIEXPORT jintArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_getSensorId(JNIEnv *env, jobject thisObj)
 {   
     uint16_t sensorID = 0;
 
@@ -83,14 +83,14 @@ JNIEXPORT jintArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getSensorId
     return results;
 }
 
-JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_startRanging(JNIEnv *env, jobject thisObj)
+JNIEXPORT void JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_startRanging(JNIEnv *env, jobject thisObj)
 {
     for (VL53L1X& vl53l1x : vl53l1x_list) {
         vl53l1x.VL53L1X_StartRanging();
     }
 }
 
-JNIEXPORT jintArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getDistance(JNIEnv * env, jobject thisObj)
+JNIEXPORT jintArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_getDistance(JNIEnv * env, jobject thisObj)
 {
     uint16_t distance = 0;
     jint distances[NUM_SENSORS];
@@ -106,14 +106,14 @@ JNIEXPORT jintArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getDistance
     return results;
 }
 
-JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_stopRanging(JNIEnv * env, jobject thisObj)
+JNIEXPORT void JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_stopRanging(JNIEnv * env, jobject thisObj)
 {
     for (VL53L1X& vl53l1x : vl53l1x_list) {
         vl53l1x.VL53L1X_StopRanging();
     }
 }
 
-JNIEXPORT jbyteArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getRangeStatus(JNIEnv *env, jobject thisObj)
+JNIEXPORT jbyteArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_getRangeStatus(JNIEnv *env, jobject thisObj)
 {
     uint8_t rangeStatus;
     jbyte rangeStatuses[NUM_SENSORS];
@@ -129,14 +129,14 @@ JNIEXPORT jbyteArray JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_getRangeSt
     return results;
 }
 
-JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_setIntermeasurementPeriod(JNIEnv *env, jobject thisObj, jint intermeasurement)
+JNIEXPORT void JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_setIntermeasurementPeriod(JNIEnv *env, jobject thisObj, jint intermeasurement)
 {
     for (VL53L1X& vl53l1x : vl53l1x_list) {
         vl53l1x.VL53L1X_SetInterMeasurementInMs(intermeasurement);
     }
 }
 
-JNIEXPORT void JNICALL Java_frc_robot_vl53l1x_VL53L1X_1JNI_1I2C_setTimingBudgetInMs(JNIEnv *env, jobject thisObj, jint TB)
+JNIEXPORT void JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_setTimingBudgetInMs(JNIEnv *env, jobject thisObj, jint TB)
   {
     for (VL53L1X& vl53l1x : vl53l1x_list) {
         vl53l1x.VL53L1X_SetTimingBudgetInMs(TB);

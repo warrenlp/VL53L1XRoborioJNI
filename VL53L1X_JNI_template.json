@@ -1,0 +1,30 @@
+{
+    "fileName": "VL53LX1_JNI.json",
+    "name": "VL53LX1_JNI",
+    "version": __VERSION_HERE__,
+    "uuid": "1056f4cf-34d8-4bf9-886e-4a50ed932281",
+    "mavenUrls": [
+        "https://github.com/warrenlp/VL53L1XRoborioJNI/raw/repository/maven"
+    ],
+    "jsonUrl": "https://github.com/warrenlp/VL53L1XRoborioJNI/raw/repository/vendordeps/VL53L1X_JNI.json",
+    "javaDependencies": [],
+    "jniDependencies": [{
+        "groupId": "com.github.warrenlp",
+        "artifactId": "vl53l1x_jni-java",
+        "version": __VERSION_HERE__
+    }],
+    "cppDependencies": [
+        {
+            "groupId": "com.github.warrenlp",
+            "artifactId": "adis16448-cpp",
+            "version": __VERSION_HERE__,
+            "libName": "libadis16448imu",
+            "headerClassifier": "headers",
+            "sharedLibrary": false,
+            "skipInvalidPlatforms": true,
+            "binaryPlatforms": [
+                "linuxathena"
+            ]
+        }
+    ]
+}
