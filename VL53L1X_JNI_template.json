@@ -7,24 +7,31 @@
         "https://github.com/warrenlp/VL53L1XRoborioJNI/raw/repository/maven"
     ],
     "jsonUrl": "https://github.com/warrenlp/VL53L1XRoborioJNI/raw/repository/vendordeps/VL53L1X_JNI.json",
-    "javaDependencies": [],
-    "jniDependencies": [{
+    "javaDependencies": [{
         "groupId": "com.github.warrenlp",
-        "artifactId": "vl53l1x_jni-java",
+        "artifactId": "vl53l1x_i2c-java",
         "version": __VERSION_HERE__
     }],
-    "cppDependencies": [
-        {
-            "groupId": "com.github.warrenlp",
-            "artifactId": "adis16448-cpp",
-            "version": __VERSION_HERE__,
-            "libName": "libadis16448imu",
-            "headerClassifier": "headers",
-            "sharedLibrary": false,
-            "skipInvalidPlatforms": true,
-            "binaryPlatforms": [
-                "linuxathena"
-            ]
-        }
-    ]
+    "jniDependencies": [{
+        "groupId": "com.github.warrenlp",
+        "artifactId": "vl53l1x_i2c-jni",
+        "version": __VERSION_HERE__,
+        "isJar": false,
+        "skipInvalidPlatforms": true,
+        "validPlatforms": [
+            "linuxathena"
+        ]
+    }],
+    "cppDependencies": [{
+        "groupId": "com.github.warrenlp",
+        "artifactId": "vl53l1x_i2c-jni",
+        "version": __VERSION_HERE__,
+        "libName": "vl53l1x_i2c",
+        "headerClassifier": "headers",
+        "sharedLibrary": true,
+        "skipInvalidPlatforms": true,
+        "binaryPlatforms": [
+            "linuxathena"
+        ]
+    }]
 }
