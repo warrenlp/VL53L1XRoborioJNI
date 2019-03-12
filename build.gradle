@@ -18,9 +18,6 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.github'
-version = '1.0'
-
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 4.
 dependencies {
@@ -38,6 +35,16 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 def baseArchiveName = 'vl53l1xroborio'
 
 task headersZip(type: Zip) {
@@ -52,7 +59,7 @@ task headersZip(type: Zip) {
 task zipSharedLibrary(type: Zip){
 	destinationDir = file("build/zips")
     baseName = baseArchiveName
-    classifier = "linuxathenashared" 
+    classifier = "linuxathena" 
     from('build/libs/vl53l1x_i2c/shared/release/') {
         into '/linux/athena/shared'
     }
@@ -68,7 +75,7 @@ task zipStaticLibrary(type: Zip){
 task zipSharedLibraryDebug(type: Zip){
 	destinationDir = file("build/zips")
     baseName = baseArchiveName
-    classifier = "linuxathenashareddebug" 
+    classifier = "linuxathenadebug" 
     from('build/libs/vl53l1x_i2c/shared/debug/') {
         into '/linux/athena/shared'
     }
@@ -92,7 +99,7 @@ headersZip.dependsOn build
 def mavenrepo = rootProject.projectDir.toString() + "/build/maven"
 def vendordepsdir = rootProject.projectDir.toString() + "/build/vendordeps"
 def libVersion = "2019-1"
-def publishGroup = 'org.github.warrenlp'
+def publishGroup = 'com.github.warrenlp'
 
 model {
     components {
@@ -138,10 +145,19 @@ model {
                 artifact headersZip
                 artifact zipSharedLibraryDebug
                 artifact zipStaticLibraryDebug
-                artifactId = "vl53l1x_i2c_jni"
+                artifactId = "vl53l1x_i2c-jni"
                 groupId publishGroup
                 version libVersion
             }
+
+            java(MavenPublication){
+				artifact jar
+				artifact sourcesJar
+				artifact javadocJar
+				artifactId = "vl53l1x_i2c-java"
+                groupId publishGroup
+                version libVersion
+			}
         }
     }
 }
