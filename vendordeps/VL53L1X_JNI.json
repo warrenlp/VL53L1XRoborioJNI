@@ -1,7 +1,7 @@
 {
     "fileName": "VL53LX1_JNI.json",
     "name": "VL53LX1_JNI",
-    "version": "2019-1",
+    "version": "2019-r1",
     "uuid": "1056f4cf-34d8-4bf9-886e-4a50ed932281",
     "mavenUrls": [
         "https://github.com/warrenlp/VL53L1XRoborioJNI/raw/repository/maven"
@@ -10,12 +10,12 @@
     "javaDependencies": [{
         "groupId": "com.github.warrenlp",
         "artifactId": "vl53l1x_i2c-java",
-        "version": "2019-1"
+        "version": "2019-r1"
     }],
     "jniDependencies": [{
         "groupId": "com.github.warrenlp",
         "artifactId": "vl53l1x_i2c-jni",
-        "version": "2019-1",
+        "version": "2019-r1",
         "isJar": false,
         "skipInvalidPlatforms": true,
         "validPlatforms": [
@@ -25,7 +25,7 @@
     "cppDependencies": [{
         "groupId": "com.github.warrenlp",
         "artifactId": "vl53l1x_i2c-jni",
-        "version": "2019-1",
+        "version": "2019-r1",
         "libName": "vl53l1x_i2c",
         "headerClassifier": "headers",
         "sharedLibrary": true,
