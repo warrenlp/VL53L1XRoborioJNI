@@ -22,5 +22,16 @@
             "linuxathena"
         ]
     }],
-    "cppDependencies": []
+    "cppDependencies": [{
+        "groupId": "com.github.warrenlp",
+        "artifactId": "vl53l1x_i2c-jni",
+        "version": "2019-1",
+        "libName": "vl53l1x_i2c",
+        "headerClassifier": "headers",
+        "sharedLibrary": true,
+        "skipInvalidPlatforms": true,
+        "binaryPlatforms": [
+            "linuxathena"
+        ]
+    }]
 }
