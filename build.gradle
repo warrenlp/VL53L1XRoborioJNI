@@ -8,6 +8,7 @@ plugins {
     id "cpp"
     id "edu.wpi.first.GradleJni" version "0.4.1"
     id "maven-publish"
+    id "com.dorongold.task-tree" version "1.3.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -98,7 +99,7 @@ headersZip.dependsOn build
 
 def mavenrepo = rootProject.projectDir.toString() + "/build/maven"
 def vendordepsdir = rootProject.projectDir.toString() + "/build/vendordeps"
-def libVersion = "2019-1"
+def libVersion = "2019-r1"
 def publishGroup = 'com.github.warrenlp'
 
 model {
@@ -178,6 +179,9 @@ task updateJSONVersion()  {
 
 // Generate a zip file (with correct directory structure for )
 task generateReleaseZip(type: Zip){
+
+    dependsOn "publishCppPublicationToMavenRepository"
+    dependsOn "publishJavaPublicationToMavenRepository"
 
     destinationDir = file("build")
     baseName = "vl53l1x_roborio_jni"
