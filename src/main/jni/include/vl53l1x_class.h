@@ -131,12 +131,12 @@ class VL53L1X : public RangeSensor
      */
     VL53L1X(std::shared_ptr<frc::I2C> i2c, int pin = -1, int pin_gpio1 = -1) : RangeSensor(), dev_i2c(i2c)
     {
-	   if (pin > 0)
+	   if (pin >= 0)
 	   {
 		   gpio0 = std::make_shared<frc::DigitalOutput>(pin);
 		   gpio0->Set(false);
 	   }
-	   if (pin_gpio1 > 0)
+	   if (pin_gpio1 >= 0)
 	   {
 		   gpio1Int = std::make_shared<frc::DigitalOutput>(pin_gpio1);
 		   gpio1Int->Set(false);

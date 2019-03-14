@@ -5,14 +5,14 @@
 #include "frc/I2C.h"
 
 #include <iostream>
+#include <cstdio>
 #include <array>
 
-// std::shared_ptr<frc::I2C> i2c_ptr = std::make_shared<frc::I2C>(frc::I2C::Port::kOnboard, VL53L1X_DEFAULT_DEVICE_ADDRESS);
-
-#define NUM_SENSORS 1
+#define NUM_SENSORS 2
 
 // Split into array for multiple sensors
-VL53L1X vl53l1x_list[] = {VL53L1X(std::make_shared<frc::I2C>(frc::I2C::Port::kOnboard, VL53L1X_DEFAULT_DEVICE_ADDRESS), 1)};
+VL53L1X vl53l1x_list[] = {VL53L1X(std::make_shared<frc::I2C>(frc::I2C::Port::kOnboard, VL53L1X_DEFAULT_DEVICE_ADDRESS), 0),
+                        VL53L1X(std::make_shared<frc::I2C>(frc::I2C::Port::kOnboard, VL53L1X_DEFAULT_DEVICE_ADDRESS), 1)};
 
 JNIEXPORT jbooleanArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_sensorInit(JNIEnv *env, jobject thisObj)
 {   
@@ -27,21 +27,20 @@ JNIEXPORT jbooleanArray JNICALL Java_com_github_warrenlp_VL53L1X_1JNI_1I2C_senso
         int status = vl53l1x.VerifySensor(VL53L1X_DEFAULT_DEVICE_ADDRESS);
 
         if (status == 0) {
-            std::cout << "INFO: C++ VerifySensor 1 successful:" << std::endl;
+            printf("INFO: C++ 1st attempt verifySensor %d successful:\n", index);
             status = vl53l1x.VL53L1X_SetI2CAddress(VL53L1X_DEFAULT_DEVICE_ADDRESS + index);
             if (status == 0) {
-                std::cout << "INFO: C++ SetI2CAddress successful:" << std::endl;
+                printf("INFO: C++ SetI2CAddress %d successful:\n", index);
             } else {
-                std::cout << "INFO: C++ SetI2CAddress NOT successful:" << std::endl;
+                printf("INFO: C++ SetI2CAddress %d NOT successful:\n", index);
             }
         } else {
-            std::cout << "INFO: C++ VerifySensor 1 NOT successful:" << std::endl;
+            printf("INFO: C++ 1st attempt verifySensor %d NOT successful:\n", index);
             status = vl53l1x.AddressChangeThenVerifySensor(VL53L1X_DEFAULT_DEVICE_ADDRESS + index);
             if (status == 0) {
-                std::cout << "INFO: C++ VerifySensor 2 successful:" << std::endl;
+                printf("INFO: C++ 2nd attempt verifySensor %d successful:\n", index);
             } else {
-                std::cout << "INFO: C++ VerifySensor 2 NOT successful:" << std::endl;
-                
+                printf("INFO: C++ 2nd attempt verifySensor %d NOT successful:\n", index);
             }
         }
 
